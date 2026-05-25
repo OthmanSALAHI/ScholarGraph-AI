@@ -31,7 +31,15 @@ pip-wheel-metadata/
 
 # Environment variables
 .env
-.env.*
+.env.local
+
+# Runtime data
+uploads/
+processed/
+chroma_db/
+backend/uploads/
+backend/processed/
+backend/chroma_db/
 
 # Build / distribution
 build/
@@ -48,4 +56,5 @@ pnpm-debug.log*
 
 # TypeScript
 *.tsbuildinfo
+
 
