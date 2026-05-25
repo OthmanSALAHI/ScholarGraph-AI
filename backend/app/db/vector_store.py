@@ -44,14 +44,7 @@ def store_chunks(
         ids=[chunk["chunk_id"] for chunk in chunks],
         documents=[chunk["text"] for chunk in chunks],
         embeddings=embeddings,
-        metadatas=[
-            {
-                "paper_id": chunk["paper_id"],
-                "section": chunk["section"],
-                "page": chunk["page"],
-            }
-            for chunk in chunks
-        ],
+        metadatas=[_chunk_metadata(chunk) for chunk in chunks],
     )
 
 
@@ -72,3 +65,15 @@ def search_chunks(
         query_kwargs["where"] = {"paper_id": paper_id}
 
     return collection.query(**query_kwargs)
+
+
+def _chunk_metadata(chunk: VectorChunk) -> dict[str, object]:
+    metadata: dict[str, object] = {
+        "paper_id": chunk["paper_id"],
+        "section": chunk["section"],
+    }
+
+    if chunk["page"] is not None:
+        metadata["page"] = chunk["page"]
+
+    return metadata

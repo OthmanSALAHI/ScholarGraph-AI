@@ -1,4 +1,4 @@
-from app.services.section_detector import detect_sections
+from app.services.section_detector import detect_section_pages, detect_sections
 
 
 def test_detect_sections_returns_requested_sections() -> None:
@@ -76,3 +76,17 @@ Done.
         "Fig. 2. Training loss across epochs.",
     ]
     assert sections["tables"] == ["Table 1: Benchmark comparison."]
+
+
+def test_detect_section_pages_returns_first_page_for_each_section() -> None:
+    pages = [
+        {"page_number": 1, "text": "Abstract\nAbstract text."},
+        {"page_number": 3, "text": "Methodology\nMethod text."},
+        {"page_number": 5, "text": "Results\nResult text."},
+    ]
+
+    assert detect_section_pages(pages) == {
+        "abstract": 1,
+        "methodology": 3,
+        "results": 5,
+    }

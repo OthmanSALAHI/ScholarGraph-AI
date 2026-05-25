@@ -9,7 +9,7 @@ class Chunk(TypedDict):
     page: int | None
 
 
-SectionMap = dict[str, str]
+SectionMap = dict[str, object]
 SectionPages = dict[str, int]
 
 
@@ -29,6 +29,9 @@ def chunk_sections(
     section_pages = section_pages or {}
 
     for section, text in sections.items():
+        if not isinstance(text, str):
+            continue
+
         section_text = text.strip()
         if not section_text:
             continue

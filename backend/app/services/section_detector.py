@@ -3,6 +3,7 @@ import re
 
 SectionValue = str | list[str]
 SectionMap = dict[str, SectionValue]
+ExtractedPage = dict[str, object]
 
 
 _OUTPUT_SECTIONS = {
@@ -64,6 +65,23 @@ def detect_sections(text: str) -> SectionMap:
 
     _save_section(sections, current_section, current_lines)
     return sections
+
+
+def detect_section_pages(pages: list[ExtractedPage]) -> dict[str, int]:
+    section_pages: dict[str, int] = {}
+
+    for page in pages:
+        page_number = page.get("page_number")
+        page_text = page.get("text", "")
+        if not isinstance(page_number, int) or not isinstance(page_text, str):
+            continue
+
+        for line in page_text.splitlines():
+            section = _detect_heading(line)
+            if section in _OUTPUT_SECTIONS and section not in section_pages:
+                section_pages[section] = page_number
+
+    return section_pages
 
 
 def _detect_heading(line: str) -> str | None:
