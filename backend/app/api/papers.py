@@ -39,6 +39,11 @@ def get_paper_analysis(paper_id: str) -> dict[str, object]:
     return analyze_paper(paper)
 
 
+@router.get("/{paper_id}")
+def get_paper(paper_id: str) -> dict[str, object]:
+    return load_processed_paper(paper_id)
+
+
 @router.post("/upload")
 def upload_paper(file: UploadFile = File(...)) -> dict[str, object]:
     if not file.filename or Path(file.filename).suffix.lower() != ".pdf":
